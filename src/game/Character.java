@@ -1,11 +1,15 @@
 package game;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 
 public class Character implements Drawable, KeyListener {
 	private static SpriteSheet spriteSheet;
@@ -32,15 +36,19 @@ public class Character implements Drawable, KeyListener {
 	private double yvel = 0;
 	private double gravity = 0.01;
 	private double size = 5;
+	private Shape charCollisionBox;
 
 	public Character() {
-		
+		charCollisionBox = new Rectangle(0, 16, 16, 16);
+		xloc = 50;
+		yloc = 400;
 	}
 	
 	@Override
 	public void draw(Graphics g) {
 		Image curImage = spriteSheet.getSprite(0, 8);
 		g.drawImage(curImage.getScaledCopy((float) 2), (int) xloc, (int) yloc);
+		g.draw(getCollisionBox());
 	}
 	
 	public void update(int delta) {
@@ -49,6 +57,27 @@ public class Character implements Drawable, KeyListener {
 		}
 		yloc += gravity * delta * yvel;
 		yvel += gravity * delta;
+	}
+	
+	public Shape getCollisionBox() {
+		Transform t = Transform.createTranslateTransform((int) xloc, (int) yloc);
+		return charCollisionBox.transform(t);
+	}
+	
+	public int getX() {
+		return (int) xloc;
+	}
+
+	public int getY() {
+		return (int) yloc;
+	}
+	
+	public void collide(int direction, int nx, int ny) {
+		if (direction % 2 == 0) {
+			yvel = 0;
+		}
+		xloc = nx;
+		yloc = ny;
 	}
 
 	@Override

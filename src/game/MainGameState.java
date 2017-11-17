@@ -11,6 +11,41 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class MainGameState implements GameState {
 
+	private Character mainCharacter = new Character();
+	private Map m = new Map();
+
+	@Override
+	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+		container.getInput().addKeyListener(mainCharacter);
+	}
+
+	@Override
+	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+		mainCharacter.draw(g);
+		m.draw(g);
+	}
+
+	@Override
+	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+		m.enforceCollisions(mainCharacter);
+		mainCharacter.update(delta);
+	}
+
+	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		
+	}
+
+	@Override
+	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+		
+	}
+
+	@Override
+	public int getID() {
+		return 0;
+	}
+
 	@Override
 	public void mouseWheelMoved(int change) {
 		
@@ -134,38 +169,5 @@ public class MainGameState implements GameState {
 		
 	}
 
-	@Override
-	public int getID() {
-		return 0;
-	}
-
-	private Character mainCharacter = new Character();
-
-	@Override
-	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		container.getInput().addKeyListener(mainCharacter);
-	}
-
-	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		mainCharacter.draw(g);
-	}
-
-	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		mainCharacter.update(delta);
-	}
-
-	@Override
-	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-		
-		
-	}
-
-	@Override
-	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
-		
-		
-	}
 
 }
