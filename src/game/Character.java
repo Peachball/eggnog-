@@ -10,8 +10,11 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
+import org.newdawn.slick.geom.Vector2f;
 
 public class Character implements Drawable, KeyListener {
+	
+	// Loads sprites on program load (for "speed")
 	private static SpriteSheet spriteSheet;
 	static {
 		try {
@@ -25,59 +28,80 @@ public class Character implements Drawable, KeyListener {
 		}
 	}
 	
-	private double xloc, yloc;
-	private double speed = .1;
+	// How much to resize sprite before size effects
+	private float SPRITE_RATIO = 2;
+	private float BOUNDING_BOX_RATIO = 1;
+	
+	private Vector2f loc = new Vector2f();
+	private double speed = .3;
 	
 	/*
 	 * Left is -1, Right is 1, Stationary is 0
 	 */
 	private byte direction = 0;
 	private boolean moving = false;
-	private double yvel = 0;
-	private double gravity = 0.01;
-	private double size = 5;
+	private Vector2f velocity = new Vector2f();
+	private double gravity = 0.05;
+	private double size = 1;
 	private Shape charCollisionBox;
 
 	public Character() {
 		charCollisionBox = new Rectangle(0, 16, 16, 16);
-		xloc = 50;
-		yloc = 400;
+		loc.x = 50;
+		loc.y = 400;
 	}
 	
 	@Override
 	public void draw(Graphics g) {
-		Image curImage = spriteSheet.getSprite(0, 8);
-		g.drawImage(curImage.getScaledCopy((float) 2), (int) xloc, (int) yloc);
+		g.drawImage(getRenderImage(), (int) loc.x, (int) loc.y);
 		g.draw(getCollisionBox());
 	}
 	
-	public void update(int delta) {
+	private Image getRenderImage() {
+		Image img = spriteSheet.getSprite(0, 8);
+		return img.getScaledCopy((float) (SPRITE_RATIO * size));
+	}
+	
+	public void updateVelocity(int delta) {
 		if (moving) {
-			xloc += speed * delta * direction;
+			velocity.x = (float) (speed * delta * direction);
 		}
-		yloc += gravity * delta * yvel;
-		yvel += gravity * delta;
+		else {
+			velocity.x = 0;
+		}
+		velocity.y += gravity * delta;
+	}
+	
+	public void update(int delta) {
+		loc.add(velocity);
+	}
+
+	public Vector2f direction () {
+		return velocity.copy();
 	}
 	
 	public Shape getCollisionBox() {
-		Transform t = Transform.createTranslateTransform((int) xloc, (int) yloc);
+		Transform t = Transform.createScaleTransform(BOUNDING_BOX_RATIO, BOUNDING_BOX_RATIO);
+		t.concatenate(Transform.createTranslateTransform((int) loc.x, (int) loc.y));
 		return charCollisionBox.transform(t);
 	}
 	
 	public int getX() {
-		return (int) xloc;
+		return (int) loc.x;
 	}
 
 	public int getY() {
-		return (int) yloc;
+		return (int) loc.y;
 	}
 	
 	public void collide(int direction, int nx, int ny) {
 		if (direction % 2 == 0) {
-			yvel = 0;
+			velocity.y = Math.min(0, velocity.y);
 		}
-		xloc = nx;
-		yloc = ny;
+		else {
+			loc.x = nx;
+		}
+		loc.y = ny;
 	}
 
 	@Override
@@ -102,16 +126,23 @@ public class Character implements Drawable, KeyListener {
 		switch (key) {
 		case Input.KEY_RIGHT:
 			direction = 1;
+			moving = true;
 			break;
 		case Input.KEY_LEFT:
 			direction = -1;
+			moving = true;
+			break;
+		case Input.KEY_UP:
+			velocity.y = -10;
 			break;
 		}
-		moving = true;
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
-		moving = false;
+		if ((Input.KEY_LEFT == key && direction == -1) ||
+				(Input.KEY_RIGHT == key && direction == 1)) {
+			moving = false;
+		}
 	}
 }
