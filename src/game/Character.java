@@ -62,6 +62,10 @@ public class Character implements Drawable, KeyListener {
 		return img.getScaledCopy((float) (SPRITE_RATIO * size));
 	}
 	
+	public Vector2f getLocation() {
+		return loc.copy();
+	}
+	
 	public void updateVelocity(int delta) {
 		if (moving) {
 			velocity.x = (float) (speed * delta * direction);
@@ -76,7 +80,7 @@ public class Character implements Drawable, KeyListener {
 		loc.add(velocity);
 	}
 
-	public Vector2f direction () {
+	public Vector2f getVelocity () {
 		return velocity.copy();
 	}
 	

@@ -27,6 +27,7 @@ public class MainGameState implements GameState {
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+		mainCharacter.updateVelocity(delta);
 		m.enforceCollisions(mainCharacter);
 		mainCharacter.update(delta);
 	}
