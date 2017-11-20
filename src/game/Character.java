@@ -54,6 +54,7 @@ public class Character implements Drawable, KeyListener {
 	@Override
 	public void draw(Graphics g) {
 		g.drawImage(getRenderImage(), (int) loc.x, (int) loc.y);
+		g.setColor(Color.red);
 		g.draw(getCollisionBox());
 	}
 	
