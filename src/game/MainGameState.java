@@ -1,11 +1,11 @@
 package game;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -23,6 +23,7 @@ public class MainGameState implements GameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		mainCharacter.draw(g);
 		m.draw(g);
+		drawDebugInformation(g);
 	}
 
 	@Override
@@ -40,6 +41,14 @@ public class MainGameState implements GameState {
 	@Override
 	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
 		
+	}
+	
+	public void drawDebugInformation(Graphics g) {
+		Vector2f loc = mainCharacter.getLocation();
+		g.setColor(Color.white);
+		g.drawString(String.format("Character position: %f %f", loc.x, loc.y), 100, 100);
+		g.setColor(Color.lightGray);
+		g.draw(mainCharacter.getPath(5));
 	}
 
 	@Override

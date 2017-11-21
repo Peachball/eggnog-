@@ -30,10 +30,10 @@ public class Map implements Drawable {
 			}
 		}
 		if (collide) {
-			System.out.println("Collision detected");
 			Vector2f collideShapeCenter = new Vector2f(collideShape.getCenter());
 			c.collide(0, c.getX(), c.getY());
 		}
+		wallTest.intersect(c);
 	}
 	
 	public void draw(Graphics g) {

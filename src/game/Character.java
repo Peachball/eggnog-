@@ -7,6 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
@@ -31,6 +32,7 @@ public class Character implements Drawable, KeyListener {
 	// How much to resize sprite before size effects
 	private float SPRITE_RATIO = 2;
 	private float BOUNDING_BOX_RATIO = 1;
+	private Vector2f SPRITE_DISPLACEMENT = new Vector2f(-16, -24);
 	
 	private Vector2f loc = new Vector2f();
 	private double speed = .3;
@@ -46,14 +48,15 @@ public class Character implements Drawable, KeyListener {
 	private Shape charCollisionBox;
 
 	public Character() {
-		charCollisionBox = new Rectangle(0, 16, 16, 16);
+		charCollisionBox = new Rectangle(-8, -8, 16, 16);
 		loc.x = 50;
 		loc.y = 400;
 	}
 	
 	@Override
 	public void draw(Graphics g) {
-		g.drawImage(getRenderImage(), (int) loc.x, (int) loc.y);
+		Vector2f imageLocation = loc.copy().add(SPRITE_DISPLACEMENT);
+		g.drawImage(getRenderImage(), (int) imageLocation.x, (int) imageLocation.y);
 		g.setColor(Color.red);
 		g.draw(getCollisionBox());
 	}
@@ -85,9 +88,17 @@ public class Character implements Drawable, KeyListener {
 		return velocity.copy();
 	}
 	
+	public Line getPath(float s) {
+		return new Line(getLocation(), getLocation().add(getVelocity().scale(s)));
+	}
+	
+	public Line getPath() {
+		return getPath(1);
+	}
+	
 	public Shape getCollisionBox() {
 		Transform t = Transform.createScaleTransform(BOUNDING_BOX_RATIO, BOUNDING_BOX_RATIO);
-		t.concatenate(Transform.createTranslateTransform((int) loc.x, (int) loc.y));
+		t.concatenate(Transform.createTranslateTransform(loc.x, loc.y));
 		return charCollisionBox.transform(t);
 	}
 	
@@ -107,6 +118,10 @@ public class Character implements Drawable, KeyListener {
 			loc.x = nx;
 		}
 		loc.y = ny;
+	}
+	
+	public void collide(int direction, Vector2f pos) {
+		collide(direction, (int) pos.x, (int) pos.y);
 	}
 
 	@Override
