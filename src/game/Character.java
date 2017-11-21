@@ -44,11 +44,13 @@ public class Character implements Drawable, KeyListener {
 	private boolean moving = false;
 	private Vector2f velocity = new Vector2f();
 	private double gravity = 0.05;
-	private double size = 1;
+	private float size = 2f;
 	private Shape charCollisionBox;
+	private boolean hasSword = true;
+	private ControlScheme controlScheme = new ControlScheme(false);
 
 	public Character() {
-		charCollisionBox = new Rectangle(-8, -8, 16, 16);
+		charCollisionBox = new Rectangle(-8, -16, 16, 32);
 		loc.x = 50;
 		loc.y = 400;
 	}
@@ -97,20 +99,21 @@ public class Character implements Drawable, KeyListener {
 	}
 	
 	public Shape getCollisionBox() {
-		Transform t = Transform.createScaleTransform(BOUNDING_BOX_RATIO, BOUNDING_BOX_RATIO);
+		Transform t = new Transform();
 		t.concatenate(Transform.createTranslateTransform(loc.x, loc.y));
+		t.concatenate(Transform.createScaleTransform(BOUNDING_BOX_RATIO * size, BOUNDING_BOX_RATIO * size));
 		return charCollisionBox.transform(t);
 	}
 	
-	public int getX() {
-		return (int) loc.x;
+	public float getX() {
+		return loc.x;
 	}
 
-	public int getY() {
-		return (int) loc.y;
+	public float getY() {
+		return loc.y;
 	}
 	
-	public void collide(int direction, int nx, int ny) {
+	public void collide(int direction, float nx, float ny) {
 		if (direction % 2 == 0) {
 			velocity.y = Math.min(0, velocity.y);
 		}
@@ -143,16 +146,17 @@ public class Character implements Drawable, KeyListener {
 
 	@Override
 	public void keyPressed(int key, char c) {
-		switch (key) {
-		case Input.KEY_RIGHT:
+		InputKey inp = controlScheme.parseInput(key);
+		switch (inp) {
+		case RIGHT:
 			direction = 1;
 			moving = true;
 			break;
-		case Input.KEY_LEFT:
+		case LEFT:
 			direction = -1;
 			moving = true;
 			break;
-		case Input.KEY_UP:
+		case UP:
 			velocity.y = -10;
 			break;
 		}
@@ -160,8 +164,9 @@ public class Character implements Drawable, KeyListener {
 
 	@Override
 	public void keyReleased(int key, char c) {
-		if ((Input.KEY_LEFT == key && direction == -1) ||
-				(Input.KEY_RIGHT == key && direction == 1)) {
+		InputKey inp = controlScheme.parseInput(key);
+		if ((InputKey.LEFT == inp && direction == -1) ||
+				(InputKey.RIGHT == inp && direction == 1)) {
 			moving = false;
 		}
 	}

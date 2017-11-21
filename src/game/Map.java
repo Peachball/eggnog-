@@ -11,11 +11,13 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class Map implements Drawable {
 	private ArrayList<Shape> boundaries = new ArrayList<Shape>();
+	private OneWayFloor floorTest;
 	private OneWayWall wallTest;
 
 	public Map() {
 		boundaries.add(new Rectangle(0, 500, 500, 800));
-		wallTest = new OneWayWall(new Line(0, 400, 500, 400), true);
+		floorTest = new OneWayFloor(new Line(0, 400, 500, 400));
+		wallTest = new OneWayWall(new Line(200, 0, 200, 800), true);
 	}
 	
 	// Boundaries
@@ -33,7 +35,8 @@ public class Map implements Drawable {
 			Vector2f collideShapeCenter = new Vector2f(collideShape.getCenter());
 			c.collide(0, c.getX(), c.getY());
 		}
-		wallTest.intersect(c);
+		floorTest.intersect(c);
+		wallTest.collide(c);
 	}
 	
 	public void draw(Graphics g) {
@@ -41,6 +44,7 @@ public class Map implements Drawable {
 		for (Shape s : boundaries) {
 			g.draw(s);
 		}
+		floorTest.draw(g);
 		wallTest.draw(g);
 	}
 }
