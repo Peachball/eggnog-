@@ -11,9 +11,15 @@ import org.newdawn.slick.geom.Vector2f;
 public class OneWayFloor implements Drawable {
 	
 	private Line l;
+	private boolean isFloor;
 
-	public OneWayFloor(Line l) {
+	public OneWayFloor(Line l, boolean floor) {
 		this.l = l;
+		this.isFloor = floor;
+	}
+	
+	public OneWayFloor(Line l) {
+		this(l, true);
 	}
 	
 	public Vector2f intersect(Character c) {
@@ -24,8 +30,12 @@ public class OneWayFloor implements Drawable {
 		for (int i = 0; i < r.getPointCount(); i++) {
 			float[] p = r.getPoint(i);
 			Vector2f vp = new Vector2f(p);
-			if (vp.y == r.getMinY()) {
-				// Only collide bottom points
+			if (vp.y == r.getMinY() && isFloor) {
+				// Only collide bottom points (if is floor)
+				continue;
+			}
+			if (vp.y == r.getMaxY() && !isFloor) {
+				// Only collide top points (if is ceiling)
 				continue;
 			}
 
@@ -41,7 +51,7 @@ public class OneWayFloor implements Drawable {
 			}
 		}
 		if (collided) {
-			c.collide(0, c.getLocation().add(overallMovement));
+			c.collide(Direction.UP, c.getLocation().add(overallMovement));
 		}
 		return overallMovement;
 	}

@@ -113,17 +113,27 @@ public class Character implements Drawable, KeyListener {
 		return loc.y;
 	}
 	
-	public void collide(int direction, float nx, float ny) {
-		if (direction % 2 == 0) {
+	/*
+	 * 
+	 */
+	public void collide(Direction direction, float nx, float ny) {
+		if (!direction.isHorizontal()) {
 			velocity.y = Math.min(0, velocity.y);
 		}
 		else {
-			loc.x = nx;
+			switch (direction) {
+			case LEFT:
+				velocity.x = Math.min(0, velocity.x);
+				break;
+			case RIGHT:
+				velocity.x = Math.max(0, velocity.x);
+			}
 		}
+		loc.x = nx;
 		loc.y = ny;
 	}
 	
-	public void collide(int direction, Vector2f pos) {
+	public void collide(Direction direction, Vector2f pos) {
 		collide(direction, (int) pos.x, (int) pos.y);
 	}
 

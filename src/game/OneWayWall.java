@@ -37,7 +37,7 @@ public class OneWayWall implements Drawable {
 			else {
 				disp.x = pos.getMinX() - hitbox.getMinX();
 			}
-			c.collide(isLeft ? 1 : 3, c.getLocation().add(disp));
+			c.collide(isLeft ? Direction.LEFT : Direction.RIGHT, c.getLocation().add(disp));
 		}
 	}
 }
