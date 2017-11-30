@@ -1,19 +1,24 @@
 package game;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Vector2f;
 
 public class Map implements Drawable {
 	private ArrayList<Shape> boundaries = new ArrayList<Shape>();
 	private Wall floorTest;
 	private Wall vertWallTest;
 	private Wall uniWall;
+	private ArrayList<Wall> walls = new ArrayList<Wall>();
 
 	public Map() {
 		boundaries.add(new Rectangle(0, 500, 500, 800));
@@ -25,21 +30,63 @@ public class Map implements Drawable {
 	// Boundaries
 	public void enforceCollisions(Character c) {
 		boolean collide = false;
-		Shape collideShape = null;
 		for (Shape s : boundaries) {
 			if (s.intersects(c.getCollisionBox())) {
 				collide = true;
-				collideShape = s;
 				break;
 			}
 		}
 		if (collide) {
-			Vector2f collideShapeCenter = new Vector2f(collideShape.getCenter());
-			c.collide(Direction.UP, c.getX(), c.getY());
+			c.collide(Direction.UP, c.getLocation());
+		}
+		for (Wall w : walls) {
+			w.intersect(c);
 		}
 		floorTest.intersect(c);
 		vertWallTest.intersect(c);
 		uniWall.intersect(c);
+	}
+	
+	/* 
+	 * file format:
+	 *    floors:
+	 *    	f [height] [start] [end]
+	 *    ceilings:
+	 *      c [height] [start] [end]
+	 *    walls
+	 *    	[l|r] [x-coord] [bottom] [top]
+	 *    Comments
+	 *    	" [comment text]
+	 *    Anything after the specified lines are comments
+	 */
+	public void loadWall(String filename) {
+		try {
+			Scanner s = new Scanner(new FileReader(filename));
+			while (s.hasNextLine()) {
+				Scanner lr = new Scanner(s.nextLine());
+				int p1 = s.nextInt(),
+					p2 = s.nextInt(),
+					p3 = s.nextInt();
+				switch (lr.next()) {
+				case "f":
+					walls.add(new Wall(new Line(), Direction.UP));
+					break;
+				case "c":
+					break;
+				case "l":
+					break;
+				case "r":
+					break;
+				case "\"":
+					break;
+				default:
+					throw new IOException(String.format("File %s incorrectly formated", filename));
+				}
+			}
+		}
+		catch (IOException e) {
+			System.err.printf("ERROR: Unable to read file %s\n", filename);
+		}
 	}
 	
 	public void draw(Graphics g) {
@@ -50,5 +97,8 @@ public class Map implements Drawable {
 		floorTest.draw(g);
 		vertWallTest.draw(g);
 		uniWall.draw(g);
+		for (Wall w : walls) {
+			w.draw(g);
+		}
 	}
 }

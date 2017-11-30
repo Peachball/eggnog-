@@ -114,7 +114,7 @@ public class Character implements Drawable, KeyListener {
 	}
 	
 	/*
-	 * 
+	 * Implement a collision
 	 */
 	public void collide(Direction direction, float nx, float ny) {
 		if (!direction.isHorizontal()) {
@@ -135,6 +135,17 @@ public class Character implements Drawable, KeyListener {
 	
 	public void collide(Direction direction, Vector2f pos) {
 		collide(direction, (int) pos.x, (int) pos.y);
+	}
+	
+	public void collide(Direction direction, float disp) {
+		Vector2f res = loc.copy();
+		if (direction.isHorizontal()) {
+			res.add(new Vector2f(disp, 0));
+		}
+		else {
+			res.add(new Vector2f(0, disp));
+		}
+		collide(direction, disp);
 	}
 
 	@Override
