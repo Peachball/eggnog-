@@ -17,7 +17,7 @@ public class MainGameState implements GameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.getInput().addKeyListener(mainCharacter);
-		m.loadWall("defaultmap.txt");
+		m.loadWall("testData/wallTest.txt");
 	}
 
 	@Override
