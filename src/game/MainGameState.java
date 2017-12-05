@@ -22,8 +22,8 @@ public class MainGameState implements GameState {
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		mainCharacter.draw(g);
-		m.draw(g);
+		mainCharacter.drawInto(g);
+		m.drawInto(g);
 		drawDebugInformation(g);
 	}
 

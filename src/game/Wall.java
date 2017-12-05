@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Wall implements Drawable {
@@ -71,8 +72,9 @@ public class Wall implements Drawable {
 
 
 	@Override
-	public void draw(Graphics g) {
+	public void drawDisplaced(Graphics g, Vector2f disp) {
+		Transform t = Transform.createTranslateTransform(disp.x, disp.y);
 		g.setColor(Color.magenta);
-		g.draw(loc);
+		g.draw(loc.transform(t));
 	}
 }

@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
 
 public class Map implements Drawable {
 	private ArrayList<Shape> boundaries = new ArrayList<Shape>();
@@ -96,13 +97,14 @@ public class Map implements Drawable {
 		walls.add(new Wall(wallLocation, dir));
 	}
 	
-	public void draw(Graphics g) {
+	@Override
+	public void drawDisplaced(Graphics g, Vector2f disp) {
 		g.setColor(Color.red);
 		for (Shape s : boundaries) {
 			g.draw(s);
 		}
 		for (Wall w : walls) {
-			w.draw(g);
+			w.drawDisplaced(g, disp);
 		}
 	}
 }
