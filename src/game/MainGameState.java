@@ -1,5 +1,8 @@
 package game;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,27 +14,44 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class MainGameState implements GameState {
 
-	private Character mainCharacter = new Character();
+	private Character player1 = new Character(),
+					  player2 = new Character();
+	private List<Character> players = Arrays.asList(player1, player2);
 	private Map m = new Map();
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-		container.getInput().addKeyListener(mainCharacter);
+		player1.setControlScheme(new ControlScheme(false));
+		player2.setControlScheme(new ControlScheme(true));
+		for (Character c : players) {
+			container.getInput().addKeyListener(c);
+		}
 		m.loadWall("testData/wallTest.txt");
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		mainCharacter.drawInto(g);
-		m.drawInto(g);
+		Viewport vp = new Viewport(g);
+		vp.extractViewportInformation(container);
+		vp.setCenter(player1.getLocation());
+		for (Character c : players) {
+			c.draw(vp);
+		}
+		m.draw(vp);
 		drawDebugInformation(g);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		mainCharacter.updateVelocity(delta);
-		m.enforceCollisions(mainCharacter);
-		mainCharacter.update(delta);
+		for (Character c: players) {
+			c.updateVelocity(delta);
+		}
+		for (Character c: players) {
+			m.enforceCollisions(c);
+		}
+		for (Character c: players) {
+			c.update(delta);
+		}
 	}
 
 	@Override
@@ -45,11 +65,11 @@ public class MainGameState implements GameState {
 	}
 	
 	public void drawDebugInformation(Graphics g) {
-		Vector2f loc = mainCharacter.getLocation();
+		Vector2f loc = player1.getLocation();
 		g.setColor(Color.white);
 		g.drawString(String.format("Character position: %f %f", loc.x, loc.y), 100, 100);
-		g.setColor(Color.lightGray);
-		g.draw(mainCharacter.getPath(5));
+		// g.setColor(Color.lightGray);
+		// g.draw(player1.getPath(5));
 	}
 
 	@Override

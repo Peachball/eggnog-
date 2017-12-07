@@ -55,13 +55,15 @@ public class Character implements Drawable, KeyListener {
 		loc.y = 400;
 	}
 	
+	public void setControlScheme(ControlScheme s) {
+		this.controlScheme = s;
+	}
+	
 	@Override
-	public void drawDisplaced(Graphics g, Vector2f disp) {
+	public void draw(Viewport vp) {
 		Vector2f imageLocation = loc.copy().add(SPRITE_DISPLACEMENT);
-		imageLocation.add(disp);
-		g.drawImage(getRenderImage(), (int) imageLocation.x, (int) imageLocation.y);
-		g.setColor(Color.red);
-		g.draw(getCollisionBox());
+		vp.draw(getRenderImage(), imageLocation);
+		vp.draw(getCollisionBox(), Color.red);
 	}
 	
 	private Image getRenderImage() {

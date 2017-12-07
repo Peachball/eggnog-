@@ -98,13 +98,12 @@ public class Map implements Drawable {
 	}
 	
 	@Override
-	public void drawDisplaced(Graphics g, Vector2f disp) {
-		g.setColor(Color.red);
+	public void draw(Viewport vp) {
 		for (Shape s : boundaries) {
-			g.draw(s);
+			vp.draw(s, Color.red);
 		}
 		for (Wall w : walls) {
-			w.drawDisplaced(g, disp);
+			w.draw(vp);
 		}
 	}
 }

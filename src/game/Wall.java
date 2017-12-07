@@ -72,9 +72,7 @@ public class Wall implements Drawable {
 
 
 	@Override
-	public void drawDisplaced(Graphics g, Vector2f disp) {
-		Transform t = Transform.createTranslateTransform(disp.x, disp.y);
-		g.setColor(Color.magenta);
-		g.draw(loc.transform(t));
+	public void draw(Viewport vp) {
+		vp.draw(loc, Color.magenta);
 	}
 }
