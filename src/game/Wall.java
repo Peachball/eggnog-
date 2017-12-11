@@ -7,6 +7,9 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 
+import game.sprites.Character;
+import game.sprites.Drawable;
+
 public class Wall implements Drawable {
 	private Direction direction;
 	private Line loc;
@@ -22,9 +25,9 @@ public class Wall implements Drawable {
 		this.direction = direction;
 	}
 
-	public Vector2f intersect(Character c) {
-		Vector2f path = c.getVelocity();
-		Polygon r = (Polygon) c.getCollisionBox();
+	public Vector2f intersect(RigidBody rb) {
+		Vector2f path = rb.getVelocity();
+		Polygon r = (Polygon) rb.getCollisionBox();
 		Vector2f overallMovement = new Vector2f();
 		boolean collided = false;
 		for (int i = 0; i < r.getPointCount(); i++) {
@@ -65,7 +68,7 @@ public class Wall implements Drawable {
 			}
 		}
 		if (collided) {
-			c.collide(this.direction, c.getLocation().add(overallMovement));
+			rb.collide(this.direction, rb.getLocation().add(overallMovement));
 		}
 		return overallMovement;
 	}

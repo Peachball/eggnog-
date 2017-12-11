@@ -13,6 +13,9 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
+import game.sprites.Character;
+import game.sprites.Drawable;
+
 public class Map implements Drawable {
 	private ArrayList<Shape> boundaries = new ArrayList<Shape>();
 	private Wall floorTest;
@@ -24,7 +27,7 @@ public class Map implements Drawable {
 	}
 	
 	// Boundaries
-	public void enforceCollisions(Character c) {
+	public void enforceCollisions(RigidBody c) {
 		boolean collide = false;
 		for (Shape s : boundaries) {
 			if (s.intersects(c.getCollisionBox())) {

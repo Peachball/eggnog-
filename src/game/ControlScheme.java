@@ -2,6 +2,8 @@ package game;
 
 import org.newdawn.slick.Input;
 
+import game.sprites.InputKey;
+
 public class ControlScheme {
 	private boolean wasd = false;
 	
