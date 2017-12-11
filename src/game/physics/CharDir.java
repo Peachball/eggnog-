@@ -1,6 +1,4 @@
-package game.sprites;
-
-import game.Direction;
+package game.physics;
 
 public enum CharDir {
 	LEFT(-1), RIGHT(1), STATIONARY(0);

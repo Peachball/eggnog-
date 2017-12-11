@@ -1,4 +1,4 @@
-package game;
+package game.physics;
 
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
@@ -6,25 +6,23 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 
-import game.sprites.CharDir;
+import game.sprites.StaticSpriteLoader;
 
 public class RigidBody {
-
-	private final float BOUNDING_BOX_RATIO = 1;
+	private final float BOUNDING_BOX_RATIO = .4f;
 	private final float JUMP_FORCE = 15;
 	
-	private float size = 2f;
+	private float size = 1f;
 	private Shape charCollisionBox;
 	private double speed = .3;
-	private Vector2f loc;
+	private Vector2f loc = new Vector2f();
 	private CharDir direction = CharDir.STATIONARY;
 	private boolean horizontalMovement = false;
 	private Vector2f velocity = new Vector2f();
 	private double gravity = 0.05;
 	
-	public RigidBody(Vector2f loc) {
+	public RigidBody() {
 		charCollisionBox = new Rectangle(-8, -16, 16, 32);
-		this.loc = loc;
 	}
 
 	public Vector2f getLocation() {
@@ -58,9 +56,10 @@ public class RigidBody {
 	}
 	
 	public Shape getCollisionBox() {
+		float overallScale = BOUNDING_BOX_RATIO * size * StaticSpriteLoader.GLOBAL_SCALE;
 		Transform t = new Transform();
 		t.concatenate(Transform.createTranslateTransform(loc.x, loc.y));
-		t.concatenate(Transform.createScaleTransform(BOUNDING_BOX_RATIO * size, BOUNDING_BOX_RATIO * size));
+		t.concatenate(Transform.createScaleTransform(overallScale, overallScale));
 		return charCollisionBox.transform(t);
 	}
 	
