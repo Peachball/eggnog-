@@ -50,4 +50,8 @@ public class Viewport {
 		windowX = gc.getWidth();
 		windowY = gc.getHeight();
 	}
+	
+	public void draw(Sprite s, Vector2f pos) {
+		s.draw(this, pos);
+	}
 }
