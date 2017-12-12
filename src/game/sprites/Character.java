@@ -2,7 +2,6 @@ package game.sprites;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 
 import game.ControlScheme;
@@ -15,8 +14,7 @@ import game.slickutils.DefaultKeyListener;
 public class Character implements Drawable, DefaultKeyListener {
 	// How much to resize sprite before size effects
 	private final float SPRITE_RATIO = 1;
-	private final Vector2f SPRITE_DISPLACEMENT = new Vector2f(-24, -24);
-	private final Vector2f SPRITE_CENTER = new Vector2f(24, 24);
+	private final Vector2f SPRITE_CENTER = new Vector2f(24, 48);
 	
 	private Sprite sprite;
 	private RigidBody rb = new RigidBody();
@@ -39,18 +37,17 @@ public class Character implements Drawable, DefaultKeyListener {
 	
 	@Override
 	public void draw(Viewport vp) {
-		Vector2f imageLocation = getLocation().add(SPRITE_DISPLACEMENT);
+		Vector2f imageLocation = getLocation();
 		sprite.setHorizontalDirection(rb.getDirection() == CharDir.RIGHT);
 		vp.draw(sprite, imageLocation);
 		vp.draw(rb.getCollisionBox(), Color.red);
 		if (sword != null) {
-			sword.drawWithOwner(vp, getSwordPosition(), rb.getDirection() == CharDir.RIGHT);
+			sword.drawWithOwner(vp, getSwordPosition());
 		}
 	}
 	
 	private Vector2f getSwordPosition() {
-		Vector2f pos = getLocation();
-		return pos;
+		return getLocation();
 	}
 	
 	public Vector2f getLocation() {
@@ -69,13 +66,21 @@ public class Character implements Drawable, DefaultKeyListener {
 		switch (inp) {
 		case RIGHT:
 			rb.move(Direction.RIGHT);
+			setSwordDirection(true);
 			break;
 		case LEFT:
 			rb.move(Direction.LEFT);
+			setSwordDirection(false);
 			break;
 		case UP:
 			rb.move(Direction.UP);
 			break;
+		}
+	}
+	
+	private void setSwordDirection(boolean isRight) {
+		if (sword != null) {
+			sword.setDirection(isRight);
 		}
 	}
 

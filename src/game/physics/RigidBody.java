@@ -22,7 +22,11 @@ public class RigidBody {
 	private double gravity = 0.05;
 	
 	public RigidBody() {
-		charCollisionBox = new Rectangle(-8, -16, 16, 32);
+		this(new Rectangle(-8, -16, 16, 32));
+	}
+	
+	public RigidBody(Shape s) {
+		charCollisionBox = s;
 	}
 
 	public Vector2f getLocation() {
@@ -71,9 +75,6 @@ public class RigidBody {
 		return loc.y;
 	}
 	
-	/*
-	 * Implement a collision
-	 */
 	public void collide(Direction direction, float nx, float ny) {
 		if (!direction.isHorizontal()) {
 			velocity.y = Math.min(0, velocity.y);
@@ -105,6 +106,10 @@ public class RigidBody {
 			res.add(new Vector2f(0, disp));
 		}
 		collide(direction, disp);
+	}
+	
+	public boolean intersect(Shape s) {
+		return getCollisionBox().intersects(s);
 	}
 	
 	public void stopMoving() {

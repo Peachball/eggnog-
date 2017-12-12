@@ -41,7 +41,6 @@ public class MainGameState extends DefaultGameState {
 			c.draw(vp);
 		}
 		m.draw(vp);
-		drawDebugInformation(g);
 	}
 
 	@Override
@@ -61,14 +60,6 @@ public class MainGameState extends DefaultGameState {
 		
 	}
 	
-	public void drawDebugInformation(Graphics g) {
-		Vector2f loc = player1.getLocation();
-		g.setColor(Color.white);
-		g.drawString(String.format("Character position: %f %f", loc.x, loc.y), 100, 100);
-		//g.setColor(Color.lightGray);
-		//g.draw(player1.getPath(5));
-	}
-
 	@Override
 	public int getID() {
 		return 0;

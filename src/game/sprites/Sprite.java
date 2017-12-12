@@ -1,6 +1,8 @@
 package game.sprites;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Sprite {
@@ -20,7 +22,7 @@ public class Sprite {
 	public void draw(Viewport vp, Vector2f loc) {
 		Vector2f drawLocation = loc.copy().add(center.negate());
 		if (horizontalFlip) {
-			drawLocation.x -= img.getWidth() - center.x;
+			drawLocation.x -= img.getWidth() - 2 * center.x;
 		}
 		vp.draw(img.getFlippedCopy(horizontalFlip, false), drawLocation);
 	}
@@ -31,5 +33,9 @@ public class Sprite {
 	
 	public void setHorizontalDirection(boolean right) {
 		horizontalFlip = !right;
+	}
+	
+	public Vector2f getCenter() {
+		return center.copy();
 	}
 }

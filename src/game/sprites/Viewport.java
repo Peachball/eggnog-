@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Viewport {
+	private final Color DEFAULT_STRING_COLOR = Color.white;
 	private Graphics dest = null;
 	private Vector2f renderPosition = new Vector2f();
 	private int windowX = 0;
@@ -53,5 +54,14 @@ public class Viewport {
 	
 	public void draw(Sprite s, Vector2f pos) {
 		s.draw(this, pos);
+	}
+	
+	public void drawString(String s, float x, float y, Color c) {
+		dest.setColor(c);
+		dest.drawString(s, x, y);
+	}
+
+	public void drawString(String s, float x, float y) {
+		drawString(s, x, y, DEFAULT_STRING_COLOR);
 	}
 }
