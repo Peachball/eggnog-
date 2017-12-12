@@ -13,6 +13,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import game.slickutils.DefaultGameState;
 import game.sprites.Character;
+import game.sprites.Viewport;
 
 public class MainGameState extends DefaultGameState {
 
@@ -64,8 +65,8 @@ public class MainGameState extends DefaultGameState {
 		Vector2f loc = player1.getLocation();
 		g.setColor(Color.white);
 		g.drawString(String.format("Character position: %f %f", loc.x, loc.y), 100, 100);
-		// g.setColor(Color.lightGray);
-		// g.draw(player1.getPath(5));
+		//g.setColor(Color.lightGray);
+		//g.draw(player1.getPath(5));
 	}
 
 	@Override

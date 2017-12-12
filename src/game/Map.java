@@ -13,14 +13,14 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
+import game.physics.Direction;
+import game.physics.RigidBody;
 import game.sprites.Character;
 import game.sprites.Drawable;
+import game.sprites.Viewport;
 
 public class Map implements Drawable {
 	private ArrayList<Shape> boundaries = new ArrayList<Shape>();
-	private Wall floorTest;
-	private Wall vertWallTest;
-	private Wall uniWall;
 	private ArrayList<Wall> walls = new ArrayList<Wall>();
 
 	public Map() {

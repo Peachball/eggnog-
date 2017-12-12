@@ -1,4 +1,4 @@
-package game;
+package game.physics;
 
 public enum Direction {
 	/* Method of specifying direcition looks really dumb, but according to

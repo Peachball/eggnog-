@@ -1,14 +1,14 @@
 package game;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 
-import game.sprites.Character;
+import game.physics.Direction;
+import game.physics.RigidBody;
 import game.sprites.Drawable;
+import game.sprites.Viewport;
 
 public class Wall implements Drawable {
 	private Direction direction;
